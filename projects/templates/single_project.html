@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+
+{% load crispy_forms_tags %}
+{% block title %}FindHim | {{project.title}} {% endblock %}
+
+{% block content %}
+
+<div class=" row single-project" style="margin: auto">
+    <div class="col-sm-6 ps-5 text-center left-part">
+        <h2>TOOLS & STACKS</h2>
+        {% for tag in project.tags.all %}
+        <span class="tag tag--pill tag--sub tag--lg">
+            {{tag}}
+        </span>
+        {% endfor %}
+        {% if project.source_link %}
+            <h5>
+                <a href="{{project.source_link}}" target="_blank">Source link
+                    <i class="fas fa-link" style="font-size: 15px"></i>
+                </a>
+            </h5>
+        {% endif %}
+
+        {% if project.demo_link %}
+            <h5>
+                <a href="{{project.demo_link}}" target="_blank">Demo Link
+                    <i class="fas fa-link" style="font-size: 15px"></i>
+                </a>
+            </h5>
+        {% endif %}
+    </div>
+    <div class="col-sm-6 right-part">
+        <img class="single-img" style="width: 420px" src="{{ project.featured_image.url }}">
+        <div>
+            <h5 class="mt-5"><a href="{% url 'user-profile' project.owner.id  %}">by {{project.owner.name}}</a></h5>
+            <h1>{{project.title}}</h1>
+            <h2>ABOUT THE PROJECT</h2>
+            <p>{{project.description}}</p>
+        </div>
+        <div class="comments">
+            <h4 class="singleProject__subtitle">FEEDBACK</h4>
+            <h5>
+                {{project.vote_ratio}}% Positive Feedback ({{project.vote_total}}
+                Vote{{project.vote_total|pluralize:"s"}})
+            </h5>
+
+            {% for review in project.review_set.all %}
+            {% if review.body %}
+            <div class="row py-3 mb-3 ">
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <a href="{% url 'user-profile' review.owner.id %}" style="text-decoration: none">
+                    <img src="{{review.owner.profile_image.url}}" width="70" class="rounded-circle mx-3"
+                         id="comment-owner-img">
+                        </a>
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <h6>{{review.owner.name}}</h6>
+                    <span class="small text-uppercase text-muted">{{review.body | linebreaksbr}}</span>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            {% if request.user.profile.id in project.review_owner %}
+                <h4 class="text-center">You can't vote twice.</h4>
+
+            {% elif request.user.profile == project.owner %}
+                <h4 class="text-center">You can't vote for your project</h4>
+
+            {% elif request.user.is_authenticated %}
+                <form action="{% url 'project' project.id%}" method="POST">
+                    {% csrf_token %}
+                    <p>{{ form | crispy }}</p>
+                    <button type="submit" class="btn text-end">Submit</button>
+                </form>
+
+            {% else %}
+                <h4 class="text-center my-5">You must be<a href="{% url 'login' %}?next={{request.path}}"> logged in</a>
+                    to post a comment</h4>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+
+
+{% block title %} FindHim | {{profile.name}} {% endblock %}
+
+{% block content %}
+
+<div class="row" style="margin: auto">
+
+    <div class="col-sm-5 text-center py-5">
+        <div class="col-sm-5 mb-5 profile-left py-3">
+            <div class="py-3 px-4">
+                <img src="{{profile.profile_image.url}}" width="150" class="img-fluid rounded-circle mb-3 ">
+                <h6><a class="edit-profile" href="{% url 'edit-profile' %}"><i class="fas fa-edit"></i>Edit</a></h6>
+                <h5>{{profile.name}}</h5>
+                <h6 class="text-muted">{{profile.short_intro}}</h6>
+                <p class="text-muted">{{profile.location}}</p>
+                {% if profile.social_github %}
+                    <a href="{{profile.social_github}}" target="_blank"><i class="fab fa-github"></i></a>
+                {% endif %}
+                {% if profile.social_telegram %}
+                    <a href="{{profile.social_telegram}}" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                {% endif %}
+                {% if profile.social_linkedin %}
+                    <a href="{{profile.social_linkedin}}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                {% endif %}
+                {% if profile.social_twitter %}
+                    <a href="{{profile.social_twitter}}" target="_blank"><i class="fab fa-twitter"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-7 py-5">
+        <div class="profile-info">
+            <h4>ABOUT ME</h4>
+            <p>{{profile.bio}}</p>
+            <h4>SKILLS <a href="{% url 'edit-skill' %}" style="float: right;"><i class="fas fa-plus-circle"></i> Skill</a> </h4>
+            {% for skill in profile.skill_set.all %}
+                <p class="tag">
+                    {{skill.name}}
+                    <a href="{% url 'delete-skill' skill.id %}" style="float: right; padding-left: 5px;"><i class="fas fa-minus-circle"></i></a>
+                </p>
+            {% endfor %}
+            <div class="self-projects py-1">
+                <h4>PROJECTS
+                    <a href="{% url 'create-project' %}" style="float: right;">
+                        <i class="fas fa-plus-circle"></i>
+                        Project
+                    </a>
+                </h4>
+                <div class="row py-2">
+                {% for project in profile.project_set.all %}
+                    <div class="col-lx-3 col-sm-12 mb-3">
+                            <div class="bg-white rounded shadow-sm py-1 px-4 card-description">
+                                <a href="{% url 'project' project.id %}" style="text-decoration: none">
+                                    <img src="{{project.featured_image.url}}" width="150" class="img-fluid  mb-3 shadow-sm"
+                                         id="acc-project-img">
+                                </a>
+                                <div class="acc-project-info">
+                                    <h5 class="mb-0">{{project.title}}</h5>
+                                    <ul class="social mb-0 list-inline mt-3 ps-2">
+                                        <li class="project-card">{{project.vote_ratio}}% Positive Feedback
+                                            {% if project.vote_total <= 1 %}
+                                                ({{project.vote_total}} Vote)
+                                            {% else %}
+                                                ({{project.vote_total}} Votes)
+                                            {% endif %}
+                                        </li>
+                                        {% for tag in project.tags.all %}
+                                            <li class="list-inline-item project-card-tag text-muted">{{tag}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <h6 class="text-end"> <a href="{% url 'update-project' project.id %}"><i class="fas fa-edit"></i> Edit</a></h6>
+                                <h6 class="text-end"> <a href="{% url 'delete-project' project.id %}"><i class="fas fa-trash"></i> Delete</a></h6>
+                            </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %} FindHim | Skills {% endblock %}
+
+{% block content %}
+
+<div class="py-1 sign-up-in">
+    <h1 class="text-center">ADD SKILL</h1>
+    <div class="col-9 col-sm-9 col-md-6 col-lg-4 mx-auto">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <p>{{ form | crispy }}</p>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

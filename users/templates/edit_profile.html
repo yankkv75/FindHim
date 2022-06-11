@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} FindHim | Account {% endblock %}
+
+{% block content %}
+
+<div class="py-1 sign-up-in">
+    <h1 class="text-center">EDIT PROFILE</h1>
+    <h5 class="text-center">Place the cursor in the paragraph whose paragraph style you want to edit</h5>
+    <div class="col-9 col-sm-9 col-md-6 col-lg-5 mx-auto">
+        <form method="POST" action="{% url 'edit-profile' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>{{ form | crispy }}
+            </p>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

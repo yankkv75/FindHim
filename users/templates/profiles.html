@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %} FindHim | Profiles {% endblock %}
+
+{% block content %}
+
+<section class="hero-section text-center">
+    <div class="container">
+        <div class="connect">
+            <h2>FIND YOUR <strong>DEVELOPER</strong> </h2>
+            <h2>FROM AROUND THE WORLD</h2>
+            <form class="col-9 col-sm-3 col-md-3 col-lg-4 mx-auto" action="{% url 'profiles' %}" method="GET">
+                <p><input type="text" name="search_query" value="{{search_query}}"
+                          class="form-control" placeholder="Search by developer name or skill"></p>
+                <button type="submit" class="btn btn-light">Search</button>
+            </form>
+        </div>
+    </div>
+</section>
+<div class="container py-5">
+    <div class="row single-card">
+        {% for profile in profiles %}
+        <div class="col-lx-3 col-sm-6 mb-5">
+            <a href="{% url 'user-profile' profile.id %}" style="text-decoration: none">
+                <div class="bg-white rounded shadow-sm py-5 px-4 card-description">
+                    <img src="{{profile.profile_image.url}}" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm"
+                         id="acc-project-img">
+                    <h5 class="mb-0">{{profile.name}}</h5>
+                    <span class="small text-uppercase text-muted">{{profile.short_intro}}</span>
+                    <h6>{{profile.bio|slice:"100"}}...</h6>
+                    <div class="dev-skills">
+                        {% for skill in profile.skill_set.all %}
+                        <span class="tag-card">
+                            <small>{{skill}}</small>
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block title %}  {% endblock %}
+
+{% block content %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="delete-template text-center">
+        <h2>Are u sure you want to delete "{{object}}"?</h2>
+        <a href="{% url 'account' %}" class="btn">Go Back</a>
+        <button type="submit" class="btn">Confirm</button>
+    </div>
+</form>
+
+{% endblock %}
